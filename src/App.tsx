@@ -6,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { UserWarning } from './UserWarning';
 
 import { USER_ID, deleteTodo, getTodos, uploadTodo } from './api/todos';
 import { Todo } from './types/Todo';
@@ -35,24 +34,6 @@ export const App: React.FC = () => {
       inputRef.current.focus();
     }
   };
-
-  useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(() => setErrorMessage(ErrorType.LOAD_TODOS));
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [errorMessage]);
-
-  useEffect(() => {
-    focusInputField();
-  }, [todoTitle, todos, selectedTodoStatus, isLoading]);
 
   const filteringTodosByActiveStatus = useMemo(
     () => [...todos].filter(todo => !todo.completed),
@@ -162,7 +143,9 @@ export const App: React.FC = () => {
 
       deleteTodo(todo.id)
         .then(() => {
-          setTodos(currentTodos => currentTodos.filter(t => t.id !== todo.id));
+          setTodos(currentTodos =>
+            currentTodos.filter(currentTodo => currentTodo.id !== todo.id),
+          );
         })
         .catch(() => {
           setErrorMessage(ErrorType.DELETE_TODO);
@@ -179,9 +162,27 @@ export const App: React.FC = () => {
     setIsLoading(false);
   }, [filteringTodosByCompletedStatus]);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  useEffect(() => {
+    focusInputField();
+  }, [todoTitle, todos, selectedTodoStatus, isLoading]);
+
+  useEffect(() => {
+    if (!USER_ID) {
+      return;
+    }
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => setErrorMessage(ErrorType.LOAD_TODOS));
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
 
   return (
     <div className="todoapp">

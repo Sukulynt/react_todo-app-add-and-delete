@@ -30,7 +30,6 @@ export const Header: React.FC<Props> = ({
         data-cy="ToggleAllButton"
       />
 
-      {/* Add a todo on form submit */}
       <form onSubmit={addTodo}>
         <input
           data-cy="NewTodoField"

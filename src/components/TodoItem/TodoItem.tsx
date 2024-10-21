@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Todo } from '../../types/Todo';
+
 import classNames from 'classnames';
 
 type Props<T> = {
@@ -39,7 +41,6 @@ export const TodoItem: React.FC<Props<Todo>> = ({
         {title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"

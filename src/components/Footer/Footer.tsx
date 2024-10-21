@@ -50,7 +50,7 @@ export const Footer: React.FC<Props> = ({
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          disabled={filteringTodosByCompletedStatus === 0}
+          disabled={!filteringTodosByCompletedStatus}
           onClick={removeTodos}
         >
           Clear completed
